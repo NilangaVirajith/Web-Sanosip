@@ -19,15 +19,17 @@ module.exports.register = function (req, res) {
 
 module.exports.login = function (req, res, next) {
     var appUser = req.body;
-    if (appUser.email.trim().length == 0 || appUser.password.trim().length == 0) {
+    console.log(appUser);
+    if (appUser.username.trim().length == 0 || appUser.password.trim().length == 0) {
         console.log('Invalid parameter lenghts');
     }
     else {
         User.find(appUser, function (err, results) {
             if (err) {
                 console.log(err);
-            } if (results) {
+            } if (results != null) {
                 dbUser = results;
+                console.log(results + ' user is');
                 pwManager.comparePasswords(dbUser.password, appUser.password, function (err, isPasswordMatch) {
                     if (isPasswordMatch) {
                         dbUser.password = "";
@@ -35,7 +37,7 @@ module.exports.login = function (req, res, next) {
                     }
 
                 })
-            }else{
+            } else {
                 res.send(null);
             }
         })
